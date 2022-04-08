@@ -39,3 +39,20 @@
     background-image: linear-gradient(to right top, #804cba, #3775db, #0094e4, #00addc, #11c2cc);
     height: 500vh;
 }
+
+.details {
+    display: block;
+}
+
+.back {
+    display: none;
+}
+
+#read-area {
+    display: none;
+    background-color: white;
+    padding: 20px;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
