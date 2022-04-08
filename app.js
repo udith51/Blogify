@@ -4,8 +4,6 @@ console.log(list.innerHTML);
 const getBlogs = async () => {
     try {
         const res = await axios.get("https://adg-rec-task.herokuapp.com/");
-        list
-        // console.log(res.data);
         for (let i of res.data) {
             let card = document.createElement('div');
             card.setAttribute('class', 'card');
