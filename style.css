@@ -60,3 +60,15 @@
 form {
     display: none;
 }
+
+i {
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+i:hover {
+    color: red;
+    background-color: black;
+}
