@@ -48,7 +48,9 @@
                         <h1 id="title"></h1>
                         <p id="b_body"></p>
                     </div>
-                    <button class="back btn btn-success float-end">All Blogs</button>
+                    <button class="back btn btn-success float-end m-2">All Blogs</button>
+                    <button class="updt btn btn-info float-end m-2">Update this blog</button>
+
                 </div>
                 <div class="col-2"></div>
             </div>
@@ -59,7 +61,7 @@
             <div class="row">
                 <div class="col-3"></div>
                 <div class="col-6">
-                    <form method="get" class="needs-validation" action="/index.html" novalidate>
+                    <form method="get" class="needs-validation new-form" action="/index.html" novalidate>
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
                             <input type="" class="form-control" id="title" placeholder="Add a Title" name="title"
@@ -87,31 +89,40 @@
             </div>
         </div>
 
+        <div class="mt-5">
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <form method="get" class="needs-validation updt-form" action="/index.html" novalidate>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="" class="form-control" id="title" placeholder="Add a Title" name="title"
+                                required>
+                            <div class="invalid-feedback">
+                                Please add a title.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="b_details" class="form-label">Blog Content</label>
+                            <textarea class="form-control" id="b_details" rows="12" name="b_details"
+                                required></textarea>
+                            <div class="invalid-feedback">
+                                Please add blog content.
+                            </div>
+                        </div>
+                        <button class="btn btn-success float-end frm-updt" type="submit">Update</button>
+                    </form>
+                </div>
+                <div class="col-3"></div>
+            </div>
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="app.js"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script src="app.js"></script>
 </body>
-<script>
-
-    // (function () {
-    //     'use strict'
-    //     var forms = document.querySelectorAll('.needs-validation')
-    //     Array.prototype.slice.call(forms)
-    //         .forEach(function (form) {
-    //             form.addEventListener('submit', function (event) {
-    //                 if (!form.checkValidity()) {
-    //                     event.preventDefault()
-    //                     event.stopPropagation()
-    //                 }
-
-    //                 form.classList.add('was-validated')
-    //             }, false)
-    //         })
-    // })()
-</script>
 
 </html>

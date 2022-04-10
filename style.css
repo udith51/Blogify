@@ -48,6 +48,10 @@
     display: none;
 }
 
+.updt {
+    display: none;
+}
+
 #read-area {
     display: none;
     background-color: white;
@@ -57,7 +61,11 @@
     border-radius: 10px;
 }
 
-form {
+.new-form {
+    display: none;
+}
+
+.updt-form {
     display: none;
 }
 

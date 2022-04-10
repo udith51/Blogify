@@ -5,9 +5,14 @@ const details = document.querySelector('.details');
 const title = document.querySelector('#title');
 const b_body = document.querySelector('#b_body');
 const back = document.querySelector('.back');
+const updt = document.querySelector('.updt');
+const frm_updt = document.querySelector('.frm-updt');
+
 const read_area = document.querySelector('#read-area');
 const add = document.querySelector('#add');
-const form = document.querySelector('form');
+const new_form = document.querySelector('.new-form');
+const updt_form = document.querySelector('.updt-form');
+
 const post = document.querySelector('.post');
 const dlt = document.querySelector('i');
 
@@ -27,7 +32,6 @@ const getBlogs = async () => {
         </div>`
             list.appendChild(card);
         }
-        console.log(list);
     }
     catch (e) {
         console.log(e);
@@ -42,6 +46,7 @@ const getABlog = async (id) => {
         b_body.innerText = res.data.details;
         console.log(res.data.title);
         console.log(res.data.details);
+        updt.setAttribute('id', `${id}`)
     }
     catch (e) {
         console.log(e);
@@ -49,11 +54,18 @@ const getABlog = async (id) => {
 }
 
 const postABlog = async () => {
-    const data = { title: form.title.value, details: form.b_details.value };
+    const data = { title: new_form.title.value, details: new_form.b_details.value };
     console.log(data);
-    const res = await axios.post("https://adg-rec-task.herokuapp.com/createBlog", data);
-
+    const res = axios.post("https://adg-rec-task.herokuapp.com/createBlog", data);
+    // const res = await fetch("https://adg-rec-task.herokuapp.com/createBlog", {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     body: data,
+    // })
     console.log(res);
+    // document.location.reload();
 }
 
 const deleteABlog = async (id) => {
@@ -67,12 +79,21 @@ const deleteABlog = async (id) => {
     }
 }
 
+const updateABlog = async (id) => {
+    const data = { title: new_form.title.value, details: new_form.b_details.value };
+    console.log(data);
+    const res = await axios.get(`https://adg-rec-task.herokuapp.com/updateBlog/${id}`);
+    console.log(res);
+    // document.location.reload();
+}
+
 content.addEventListener('click', (e) => {
 
     if (e.target.classList.contains('read')) {
         content.style.display = 'none';
         details.style.display = 'block';
         back.style.display = 'block';
+        updt.style.display = 'block';
         read_area.style.display = 'block';
         getABlog(e.target.id);
     }
@@ -87,15 +108,17 @@ back.addEventListener('click', () => {
     content.style.display = 'block';
     details.style.display = 'none';
     back.style.display = 'none';
+    updt.style.display = 'none';
 })
 
 add.addEventListener('click', (e) => {
-    console.log('CLK');
     e.preventDefault();
     content.style.display = 'none';
     read_area.style.display = 'none';
-    form.style.display = 'block';
+    new_form.style.display = 'block';
     back.style.display = 'none';
+    updt.style.display = 'none';
+    updt_form.style.display = 'none';
 })
 post.addEventListener('click', e => {
     'use strict'
@@ -111,9 +134,44 @@ post.addEventListener('click', e => {
                 form.classList.add('was-validated')
             }, false)
         })
-    if (form.title.value && form.b_details.value) {
+    if (new_form.title.value && new_form.b_details.value) {
         postABlog();
         e.preventDefault();
     }
 
+})
+updt.addEventListener('click', async (e) => {
+    console.dir(e.target.id);
+    content.style.display = 'none';
+    read_area.style.display = 'none';
+    new_form.style.display = 'none';
+    updt_form.style.display = 'block';
+    back.style.display = 'none';
+    updt.style.display = 'none';
+    const res = await axios.get(`https://adg-rec-task.herokuapp.com/getBlog/${e.target.id}`);
+    console.log(res);
+    updt_form.title.value = res.data.title;
+    updt_form.b_details.value = res.data.details;
+    frm_updt.setAttribute('id', e.target.id);
+})
+frm_updt.addEventListener('click', async (e) => {
+    // console.log(e.target.id);
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    if (new_form.title.value && new_form.b_details.value) {
+        console.log('Here');
+        updateABlog(e.target.id);
+        e.preventDefault();
+    }
 })
