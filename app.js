@@ -9,6 +9,7 @@ const read_area = document.querySelector('#read-area');
 const add = document.querySelector('#add');
 const form = document.querySelector('form');
 const post = document.querySelector('.post');
+const dlt = document.querySelector('i');
 
 
 const getBlogs = async () => {
@@ -22,6 +23,7 @@ const getBlogs = async () => {
         <div class="card-body">
             <h5 class="card-title">${i.title}</h5>
             <a href="#" class="read btn btn-primary" id=${i._id} >Read</a>
+            <i class="fa fa-trash float-end mt-1" id=${i._id}></i>
         </div>`
             list.appendChild(card);
         }
@@ -46,6 +48,25 @@ const getABlog = async (id) => {
     }
 }
 
+const postABlog = async () => {
+    const data = { title: form.title.value, details: form.b_details.value };
+    console.log(data);
+    const res = await axios.post("https://adg-rec-task.herokuapp.com/createBlog", data);
+
+    console.log(res);
+}
+
+const deleteABlog = async (id) => {
+    try {
+        const res = await axios.post(`https://adg-rec-task.herokuapp.com/deleteBlog/${id}`);
+        console.log(res);
+        document.location.reload(true);
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
 content.addEventListener('click', (e) => {
 
     if (e.target.classList.contains('read')) {
@@ -54,6 +75,10 @@ content.addEventListener('click', (e) => {
         back.style.display = 'block';
         read_area.style.display = 'block';
         getABlog(e.target.id);
+    }
+    else if (e.target.classList.contains('fa')) {
+        console.log(e.target.id);
+        deleteABlog(e.target.id);
     }
 })
 
@@ -87,24 +112,8 @@ post.addEventListener('click', e => {
             }, false)
         })
     if (form.title.value && form.b_details.value) {
-        content.style.display = 'block';
-        form.style.display = 'none';
+        postABlog();
+        e.preventDefault();
     }
 
 })
-
-// function strategize() {
-//     'use strict'
-//     var forms = document.querySelectorAll('.needs-validation')
-//     Array.prototype.slice.call(forms)
-//         .forEach(function (form) {
-//             form.addEventListener('submit', function (event) {
-//                 if (!form.checkValidity()) {
-//                     event.preventDefault()
-//                     event.stopPropagation()
-//                 }
-
-//                 form.classList.add('was-validated')
-//             }, false)
-//         })
-// }
