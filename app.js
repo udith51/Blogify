@@ -21,12 +21,16 @@ const getBlogs = async () => {
     try {
         const res = await axios.get("https://adg-rec-task.herokuapp.com/");
         for (let i of res.data) {
+            if (!i.author)
+                i.author = "Anonymous";
+            console.log(i);
             let card = document.createElement('div');
             card.setAttribute('class', 'card m-3');
             card.setAttribute('style', 'width: 18rem');
             card.innerHTML = `<img src="Images/book.jpg" class="card-img-top">
         <div class="card-body">
             <h5 class="card-title">${i.title}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">By ${i.author}</h6>
             <a href="#" class="read btn btn-primary" id=${i._id} >Read</a>
             <i class="fa fa-trash float-end mt-1" id=${i._id}></i>
         </div>`
@@ -54,23 +58,16 @@ const getABlog = async (id) => {
 }
 
 const postABlog = async () => {
-    const data = { title: new_form.title.value, details: new_form.b_details.value };
+    const data = { title: new_form.title.value, author: new_form.author.value, details: new_form.b_details.value };
     console.log(data);
-    const res = axios.post("https://adg-rec-task.herokuapp.com/createBlog", data);
-    // const res = await fetch("https://adg-rec-task.herokuapp.com/createBlog", {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     body: data,
-    // })
+    const res = await axios.post("https://adg-rec-task.herokuapp.com/createBlog", data);
     console.log(res);
-    // document.location.reload();
+    document.location.reload();
 }
 
 const deleteABlog = async (id) => {
     try {
-        const res = await axios.post(`https://adg-rec-task.herokuapp.com/deleteBlog/${id}`);
+        const res = await axios.delete(`https://adg-rec-task.herokuapp.com/deleteBlog/${id}`);
         console.log(res);
         document.location.reload(true);
     }
@@ -80,7 +77,8 @@ const deleteABlog = async (id) => {
 }
 
 const updateABlog = async (id) => {
-    const data = { title: new_form.title.value, details: new_form.b_details.value };
+
+    // const data = { title: new_form.title.value,author:, details: new_form.b_details.value };
     console.log(data);
     const res = await axios.get(`https://adg-rec-task.herokuapp.com/updateBlog/${id}`);
     console.log(res);
@@ -151,11 +149,11 @@ updt.addEventListener('click', async (e) => {
     const res = await axios.get(`https://adg-rec-task.herokuapp.com/getBlog/${e.target.id}`);
     console.log(res);
     updt_form.title.value = res.data.title;
+    updt_form.author.value = res.data.author
     updt_form.b_details.value = res.data.details;
     frm_updt.setAttribute('id', e.target.id);
 })
 frm_updt.addEventListener('click', async (e) => {
-    // console.log(e.target.id);
     'use strict'
     var forms = document.querySelectorAll('.needs-validation')
     Array.prototype.slice.call(forms)
