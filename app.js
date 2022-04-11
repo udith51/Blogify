@@ -14,25 +14,33 @@ const post = document.querySelector('.post');
 const dlt = document.querySelector('i');
 
 
+function hideLoader() {
+    document.getElementById('loading').style.display = 'none';
+}
+
 const getBlogs = async () => {
     try {
         const res = await axios.get("https://adg-rec-task.herokuapp.com/");
-        for (let i of res.data) {
-            var img_link = await axios.get(`https://api.unsplash.com/search/photos?query=${i.title}&client_id=EQ72jmCIGFpQLLFmOf-Cshj4EMZ4sAWa7r3wVzzTbsU`);
-            console.log(img_link.data.results[0].urls.full);
-            if (!i.author)
-                i.author = "Anonymous";
-            let card = document.createElement('div');
-            card.setAttribute('class', 'card m-3');
-            card.setAttribute('style', 'width: 18rem');
-            card.innerHTML = `<img src=${img_link.data.results[0].urls.thumb} class="card-img-top img-thumbnail">
+        if (res) {
+            hideLoader();
+            for (let i of res.data) {
+                var img_link = await axios.get(`https://api.unsplash.com/search/photos?query=${i.title}&client_id=EQ72jmCIGFpQLLFmOf-Cshj4EMZ4sAWa7r3wVzzTbsU`);
+                console.log(img_link.data.results[0].urls.full);
+                if (!i.author)
+                    i.author = "Anonymous";
+                let card = document.createElement('div');
+                card.setAttribute('class', 'card m-3');
+                card.setAttribute('style', 'width: 18rem');
+                card.innerHTML = `<img src=${img_link.data.results[0].urls.thumb} class="card-img-top img-thumbnail">
         <div class="card-body">
             <h5 class="card-title">${i.title}</h5>
             <h6 class="card-subtitle mb-2 text-muted">By ${i.author}</h6>
-            <a href="#" class="read btn btn-primary" id=${i._id} >Read</a>
+            <button class="read btn" id=${i._id}><span class="read" id=${i._id}>Read</span></button>
+
             <i class="fa fa-trash float-end mt-1 del" id=${i._id}></i>
         </div>`
-            list.appendChild(card);
+                list.appendChild(card);
+            }
         }
     }
     catch (e) {
@@ -112,6 +120,7 @@ add.addEventListener('click', (e) => {
     updt.style.display = 'none';
     updt_form.style.display = 'none';
 })
+
 post.addEventListener('click', e => {
     'use strict'
     var forms = document.querySelectorAll('.needs-validation')
@@ -132,6 +141,7 @@ post.addEventListener('click', e => {
     }
 
 })
+
 updt.addEventListener('click', async (e) => {
     console.dir(e.target.id);
     content.style.display = 'none';
@@ -146,6 +156,7 @@ updt.addEventListener('click', async (e) => {
     updt_form.b_details.value = res.data.details;
     frm_updt.setAttribute('id', e.target.id);
 })
+
 frm_updt.addEventListener('click', async (e) => {
     'use strict'
     var forms = document.querySelectorAll('.needs-validation')
