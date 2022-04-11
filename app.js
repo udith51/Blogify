@@ -1,4 +1,3 @@
-console.log('Start');
 const list = document.querySelector('#list');
 const content = document.querySelector('.content');
 const details = document.querySelector('.details');
@@ -7,12 +6,10 @@ const b_body = document.querySelector('#b_body');
 const back = document.querySelector('.back');
 const updt = document.querySelector('.updt');
 const frm_updt = document.querySelector('.frm-updt');
-
 const read_area = document.querySelector('#read-area');
 const add = document.querySelector('#add');
 const new_form = document.querySelector('.new-form');
 const updt_form = document.querySelector('.updt-form');
-
 const post = document.querySelector('.post');
 const dlt = document.querySelector('i');
 
@@ -21,18 +18,19 @@ const getBlogs = async () => {
     try {
         const res = await axios.get("https://adg-rec-task.herokuapp.com/");
         for (let i of res.data) {
+            var img_link = await axios.get(`https://api.unsplash.com/search/photos?query=${i.title}&client_id=EQ72jmCIGFpQLLFmOf-Cshj4EMZ4sAWa7r3wVzzTbsU`);
+            console.log(img_link.data.results[0].urls.full);
             if (!i.author)
                 i.author = "Anonymous";
-            console.log(i);
             let card = document.createElement('div');
             card.setAttribute('class', 'card m-3');
             card.setAttribute('style', 'width: 18rem');
-            card.innerHTML = `<img src="Images/book.jpg" class="card-img-top">
+            card.innerHTML = `<img src=${img_link.data.results[0].urls.thumb} class="card-img-top img-thumbnail">
         <div class="card-body">
             <h5 class="card-title">${i.title}</h5>
             <h6 class="card-subtitle mb-2 text-muted">By ${i.author}</h6>
             <a href="#" class="read btn btn-primary" id=${i._id} >Read</a>
-            <i class="fa fa-trash float-end mt-1" id=${i._id}></i>
+            <i class="fa fa-trash float-end mt-1 del" id=${i._id}></i>
         </div>`
             list.appendChild(card);
         }
@@ -48,8 +46,6 @@ const getABlog = async (id) => {
         const res = await axios.get(`https://adg-rec-task.herokuapp.com/getBlog/${id}`);
         title.textContent = res.data.title;
         b_body.innerText = res.data.details;
-        console.log(res.data.title);
-        console.log(res.data.details);
         updt.setAttribute('id', `${id}`)
     }
     catch (e) {
@@ -59,9 +55,7 @@ const getABlog = async (id) => {
 
 const postABlog = async () => {
     const data = { title: new_form.title.value, author: new_form.author.value, details: new_form.b_details.value };
-    console.log(data);
     const res = await axios.post("https://adg-rec-task.herokuapp.com/createBlog", data);
-    console.log(res);
     document.location.reload();
 }
 
@@ -78,11 +72,11 @@ const deleteABlog = async (id) => {
 
 const updateABlog = async (id) => {
 
-    // const data = { title: new_form.title.value,author:, details: new_form.b_details.value };
+    const data = { title: updt_form.title.value, author: updt_form.author.value, details: updt_form.b_details.value };
     console.log(data);
-    const res = await axios.get(`https://adg-rec-task.herokuapp.com/updateBlog/${id}`);
+    const res = await axios.patch(`https://adg-rec-task.herokuapp.com/updateBlog/${id}`, data);
     console.log(res);
-    // document.location.reload();
+    document.location.reload();
 }
 
 content.addEventListener('click', (e) => {
@@ -147,7 +141,6 @@ updt.addEventListener('click', async (e) => {
     back.style.display = 'none';
     updt.style.display = 'none';
     const res = await axios.get(`https://adg-rec-task.herokuapp.com/getBlog/${e.target.id}`);
-    console.log(res);
     updt_form.title.value = res.data.title;
     updt_form.author.value = res.data.author
     updt_form.b_details.value = res.data.details;
@@ -167,8 +160,7 @@ frm_updt.addEventListener('click', async (e) => {
                 form.classList.add('was-validated')
             }, false)
         })
-    if (new_form.title.value && new_form.b_details.value) {
-        console.log('Here');
+    if (updt_form.title.value && updt_form.b_details.value) {
         updateABlog(e.target.id);
         e.preventDefault();
     }
